@@ -82,6 +82,20 @@ namespace WpfApp_ThreadingBinding_3
 
         private void ProgressContinuosChildThreadClick(object sender, RoutedEventArgs e)
         {
+            // If you use data-binded object, progressBarInfo2 here, on Main Thread it also freezes UI.
+
+            //while (progressBarInfo2.Progress < 100)
+            //{
+            //    progressBarInfo2.Progress += progressValue;
+
+            //    Thread.Sleep(500);
+            //}
+
+            //MessageBox.Show("This does not freezes the UI");
+
+
+            // If you use data-binded object, progressBarInfo here, on Child Thread it does not freeze UI.
+
             Thread thread = new Thread(() =>
             {
                 while (progressBarInfo2.Progress < 100)
@@ -96,7 +110,7 @@ namespace WpfApp_ThreadingBinding_3
 
             thread.Start();
 
-            
+
         }
 
 
