@@ -25,6 +25,7 @@ namespace WpfApp_ThreadingBinding_3
         private int progressValue = 20;
         private ProgressBarInfo progressBarInfo1 = new ProgressBarInfo() { Progress = 0 };
         private ProgressBarInfo progressBarInfo2 = new ProgressBarInfo() { Progress = 0 };
+        private ProgressBarInfo progressBarInfo3 = new ProgressBarInfo() { Progress = 0 };
         public MainWindow()
         {
             InitializeComponent();
@@ -36,6 +37,11 @@ namespace WpfApp_ThreadingBinding_3
             Binding binding2 = new Binding("Progress");
             binding2.Source = progressBarInfo2;
             progressBar2.SetBinding(ProgressBar.ValueProperty, binding2);
+
+            Binding binding3 = new Binding("Progress");
+            binding3.Source = progressBarInfo3;
+            progressBar3.SetBinding(ProgressBar.ValueProperty, binding3);
+                 
 
 
         }
@@ -98,13 +104,11 @@ namespace WpfApp_ThreadingBinding_3
 
             Thread thread = new Thread(() =>
             {
-                while (progressBarInfo2.Progress < 100)
+                while (progressBarInfo2.Progress <= 100)
                 {
                     progressBarInfo2.Progress += progressValue;
-
                     Thread.Sleep(500);
                 }
-
                 MessageBox.Show("This does not freezes the UI");
             });
 
@@ -113,12 +117,57 @@ namespace WpfApp_ThreadingBinding_3
 
         }
 
+        private void ButtonClick(object sender, RoutedEventArgs e)
+        {
+            string message = "Aragorn";
+            Thread thread = new Thread(() =>
+            {
+                message = DoWork("Sauron");
+
+            });
+
+            thread.Start();
+            //thread.Join();
+
+            textBox1.Text = message;
+        }
+
+        private string DoWork(string str)
+        {
+            while(progressBarInfo3.Progress <= 100)
+            {
+                progressBarInfo3.Progress += progressValue;
+                Thread.Sleep(1000);
+            }
+            return str;
+        }
+
+        private void ButtonClick1(object sender, RoutedEventArgs e)
+        {
+            string message = "Aragorn";
+            Task<string> task = Task<string>.Factory.StartNew(() =>
+            {
+                while (progressBarInfo3.Progress <= 100)
+                {
+                    progressBarInfo3.Progress += progressValue;
+                    Thread.Sleep(500);
+                }
+
+                return "Sauron";
+            });
+
+            Task.WaitAll(task);
+
+            textBox1.Text = task.Result;
+        }
 
         private void ClearProgressBarsClick(object sender, RoutedEventArgs e)
         {
             progressBar1.Value = 0;
             progressBar2.Value = 0;
+            progressBar3.Value = 0;
         }
+
     }
 
     public class ProgressBarInfo : INotifyPropertyChanged
