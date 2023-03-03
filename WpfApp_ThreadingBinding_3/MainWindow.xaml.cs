@@ -25,7 +25,7 @@ namespace WpfApp_ThreadingBinding_3
         private int progressValue = 20;
         private ProgressBarInfo progressBarInfo1 = new ProgressBarInfo() { Progress = 0 };
         private ProgressBarInfo progressBarInfo2 = new ProgressBarInfo() { Progress = 0 };
-        private ProgressBarInfo progressBarInfo3 = new ProgressBarInfo() { Progress = 50 };
+        private ProgressBarInfo progressBarInfo3 = new ProgressBarInfo() { Progress = 0 };
         public MainWindow()
         {
             InitializeComponent();
